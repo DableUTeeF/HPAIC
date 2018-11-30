@@ -124,7 +124,8 @@ if __name__ == '__main__':
 
 
     def train(epoch):
-        print('\nEpoch: %d/%d' % (epoch, args.epochs))
+        color = colors[np.random.randint(1, len(colors))]
+        print(color+'Epoch: %d/%d' % (epoch, args.epochs))
         model.train()
         train_loss = 0
         correct = 0
@@ -232,5 +233,6 @@ if __name__ == '__main__':
         scheduler.step()
         train(epoch)
         test(epoch)
-        print(f'best: {best_acc}: {best_no}/{len(val_loader) * args.val_batch_size}')
+        color = colors[np.random.randint(1, len(colors))]
+        print(f'{color}best: {best_acc}: {best_no}/{len(val_loader) * args.val_batch_size}{colors[0]}')
     start_epoch += args.epochs
