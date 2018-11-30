@@ -38,8 +38,11 @@ class DotDict(dict):
 
 def normalize(x):
     x = x.astype('float32')
-    x -= np.array([13.46640062, 12.92092559, 20.01200438, 20.58882595], dtype='float32')
-    x /= np.array([34.85144181, 21.93041967, 32.65222709, 31.93022657], dtype='float32')
+    mean = np.array([20.01200438, 12.92092559, 13.46640062, 20.58882595], dtype='float32')
+    std = np.array([32.65222709, 21.93041967, 34.85144181, 31.93022657], dtype='float32')
+    for i in range(4):
+        x[i, :, :] -= mean[i]
+        x[i, :, :] /= std[i]
     return x
 
 
