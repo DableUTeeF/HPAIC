@@ -36,9 +36,15 @@ class DotDict(dict):
         return self[name]
 
 
+def normalize(x):
+    x /= 127.5
+    x -= 1
+    return x
+
+
 if __name__ == '__main__':
 
-    colors = ['\033[0m', '\033[91m', '\033[92m', '\033[93m', '\033[94m', '\033[95m', '\033[96m']
+    colors = ['\033[0m', '\033[31m', '\033[32m', '\033[33m', '\033[34m', '\033[35m', '\033[36m', '\033[37m']
     args = DotDict({
         'batch_size': 32,
         'batch_mul': 1,
@@ -73,8 +79,6 @@ if __name__ == '__main__':
     start_epoch = 1
     model = getmodel(28).cuda()
 
-    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                     std=[0.229, 0.224, 0.225])
     optimizer = torch.optim.SGD(model.parameters(), 0.1,
                                 momentum=0.9,
                                 weight_decay=1e-4,
@@ -99,6 +103,7 @@ if __name__ == '__main__':
                                       rootpath,
                                       28,
                                       (224, 224),
+                                      normalize=normalize,
                                       )
     trainloader = torch.utils.data.DataLoader(train_dataset,
                                               batch_size=args.batch_size,
@@ -109,6 +114,7 @@ if __name__ == '__main__':
                                      rootpath,
                                      28,
                                      (224, 224),
+                                     normalize=normalize,
                                      )
     val_loader = torch.utils.data.DataLoader(
         test_dataset,

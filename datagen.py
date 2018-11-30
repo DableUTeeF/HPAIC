@@ -4,12 +4,13 @@ import os
 
 
 class Generator:
-    def __init__(self, csv, rootpath, target_len, input_size=None, batch_size=None):
+    def __init__(self, csv, rootpath, target_len, input_size=None, batch_size=None, normalize=lambda x: x):
         self.csv = csv
         self.rootpath = rootpath
         self.input_size = (input_size, input_size) if isinstance(input_size, int) else input_size
         self.batch_size = batch_size
         self.target_len = target_len
+        self.normalize = normalize
 
     def get_single_image(self, idx):
         x = np.zeros((*self.input_size, 4), dtype='float32')
@@ -18,6 +19,7 @@ class Generator:
             img = Image.open(os.path.join(self.rootpath, self.csv[idx][0]+f'_{c[i]}.png')).resize(self.input_size)
             x[:, :, i] = np.array(img, dtype='float32')
         x = np.rollaxis(x, 2)
+        x = self.normalize(x)
         y = np.zeros(self.target_len, dtype='uint8')
         for target in self.csv[idx][1]:
             y[int(target)] = 1
@@ -32,12 +34,13 @@ class Generator:
 
 
 class TestGen:
-    def __init__(self, rootpath, target_len, input_size=None, batch_size=None):
+    def __init__(self, rootpath, target_len, input_size=None, batch_size=None, normalize=lambda x: x):
         self.files = sorted(os.listdir(rootpath))
         self.rootpath = rootpath
         self.input_size = (input_size, input_size) if isinstance(input_size, int) else input_size
         self.batch_size = batch_size
         self.target_len = target_len
+        self.normalize = normalize
 
     def get_single_image(self, idx):
         idx *= 4
@@ -48,6 +51,7 @@ class TestGen:
             img = Image.open(os.path.join(self.rootpath, f'{imname}_{c[i]}.png')).resize(self.input_size)
             x[:, :, i] = np.array(img, dtype='float32')
         x = np.rollaxis(x, 2)
+        x = self.normalize(x)
         return x
 
     def __len__(self):
