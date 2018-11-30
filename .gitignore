@@ -1,0 +1,4 @@
+.idea/*
+checkpoint/*
+k/weights/*
+__pycache__/*
