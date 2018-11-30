@@ -47,7 +47,7 @@ if __name__ == '__main__':
         'model': '',
         'train_plot': False,
         'epochs': 180,
-        'try_no': '1_dense201',
+        'try_no': '2_dense201',
         'imsize': 224,
         'imsize_l': 256,
         'traindir': '/root/palm/DATA/plant/train',
@@ -148,6 +148,7 @@ if __name__ == '__main__':
         last_time = start_time
         for batch_idx, (inputs, targets) in enumerate(trainloader):
             inputs, targets = inputs.to('cuda'), targets.to('cuda')
+            inputs = normalize(inputs)
             outputs = model(inputs)
             # targets = torch.cat((targets, targets, targets, targets, targets))
 
@@ -204,6 +205,7 @@ if __name__ == '__main__':
         with torch.no_grad():
             for batch_idx, (inputs, targets) in enumerate(val_loader):
                 inputs, targets = inputs.to('cuda'), targets.to('cuda')
+                inputs = normalize(inputs)
                 outputs = model(inputs)
                 loss = criterion(outputs, targets.float())
                 """"""
