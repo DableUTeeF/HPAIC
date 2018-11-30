@@ -82,9 +82,13 @@ if __name__ == '__main__':
         lists.append((id_, target.split()))
     train_list = lists[:26073]
     test_list = lists[26073:]
-
+    try:
+        os.listdir('/root')
+        rootpath = '/root/palm/DATA/HPAIC/train'
+    except PermissionError:
+        rootpath = '/media/palm/data/Human Protein Atlas/train'
     train_dataset = datagen.Generator(train_list,
-                                      '/root/palm/DATA/HPAIC/train',
+                                      rootpath,
                                       28,
                                       (224, 224),
                                       )
@@ -94,7 +98,7 @@ if __name__ == '__main__':
                                               num_workers=args.workers,
                                               pin_memory=False)
     test_dataset = datagen.Generator(test_list,
-                                     '/root/palm/DATA/HPAIC/train',
+                                     rootpath,
                                      28,
                                      (224, 224),
                                      )
