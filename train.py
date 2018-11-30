@@ -55,7 +55,8 @@ if __name__ == '__main__':
         'workers': 16,
         'resume': False,
     })
-    logger = Logger(f'./logs/{args.try_no}')
+    length = len(os.listdir(f'./logs/{args.try_no}/'))
+    logger = Logger(f'./logs/{args.try_no}/{length}')
     logger.text_summary('Describe', 'DenseNet201', 0)
     logger.text_summary('Describe', 'Batch size: 32*1', 1)
     logger.text_summary('Describe', 'Input size: 224/256', 2)
