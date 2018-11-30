@@ -14,7 +14,7 @@ import torch.optim
 import torch.utils.data
 import torch.utils.data.distributed
 import torchvision.transforms as transforms
-import torch.nn.functional as f
+import numpy as np
 from utils import Logger, format_time
 import models
 from torch.optim.lr_scheduler import MultiStepLR
@@ -37,6 +37,7 @@ class DotDict(dict):
 
 if __name__ == '__main__':
 
+    colors = ['\033[0m', '\033[90m', '\033[91m', '\033[92m', '\033[93m', '\033[94m', '\033[95m', '\033[96m']
     args = DotDict({
         'batch_size': 32,
         'batch_mul': 1,
@@ -119,6 +120,7 @@ if __name__ == '__main__':
                   .format(args.resume, checkpoint['epoch']))
         else:
             print("=> no checkpoint found at '{}'".format(args.resume))
+    c = 0
 
 
     def train(epoch):
@@ -156,11 +158,12 @@ if __name__ == '__main__':
                 print(f'\r{" " * (len(lss))}', end='')
             except NameError:
                 pass
+            color = colors[np.random.randint(1, 8)]
             lss = f'{batch_idx}/{len(trainloader)} | ' + \
                   f'ETA: {format_time(step_time * (len(trainloader) - batch_idx))} - ' + \
                   f'loss: {train_loss / (batch_idx + 1):.{3}} - ' + \
                   f'acc: {correct / (batch_idx+1):.{5}}'
-            print(f'\r{lss}', end='')
+            print(f'\r{color}{lss}', end=colors[0])
 
         for tag, value in model.named_parameters():
             tag = tag.replace('.', '/')
@@ -168,7 +171,8 @@ if __name__ == '__main__':
             logger.histo_summary(tag + '/grad', value.grad.data.cpu().numpy(), epoch)
         logger.scalar_summary('acc', correct / total, epoch)
         logger.scalar_summary('loss', train_loss / (batch_idx + 1), epoch)
-        print(f'\r '
+        color = colors[np.random.randint(1, 8)]
+        print(f'\r {color}'
               f'ToT: {format_time(time.time() - start_time)} - '
               f'loss: {train_loss / (batch_idx + 1):.{3}} - '
               f'acc: {correct / total:.{5}}', end='')
@@ -203,7 +207,7 @@ if __name__ == '__main__':
                 #              % (100. * correct / total))
         logger.scalar_summary('val_acc', correct / total, epoch)
         logger.scalar_summary('val_loss', test_loss / (batch_idx + 1), epoch)
-        print(f' - val_acc: {correct / total:.{5}}')
+        print(f'{c} - val_acc: {correct / total:.{5}}{colors[0]}')
         # platue.step(correct)
 
         # Save checkpoint.
