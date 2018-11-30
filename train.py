@@ -159,7 +159,7 @@ if __name__ == '__main__':
             lss = f'{batch_idx}/{len(trainloader)} | ' + \
                   f'ETA: {format_time(step_time * (len(trainloader) - batch_idx))} - ' + \
                   f'loss: {train_loss / (batch_idx + 1):.{3}} - ' + \
-                  f'acc: {correct / total:.{5}}'
+                  f'acc: {correct / (batch_idx+1):.{5}}'
             print(f'\r{lss}', end='')
 
         for tag, value in model.named_parameters():
