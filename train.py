@@ -155,7 +155,7 @@ if __name__ == '__main__':
         last_time = start_time
         for batch_idx, (inputs, targets) in enumerate(trainloader):
             inputs, targets = inputs.to('cuda'), targets.to('cuda')
-            inputs = normalize(inputs)
+            # inputs = normalize(inputs)
             outputs = model(inputs)
             # targets = torch.cat((targets, targets, targets, targets, targets))
 
@@ -212,7 +212,7 @@ if __name__ == '__main__':
         with torch.no_grad():
             for batch_idx, (inputs, targets) in enumerate(val_loader):
                 inputs, targets = inputs.to('cuda'), targets.to('cuda')
-                inputs = normalize(inputs)
+                # inputs = normalize(inputs)
                 outputs = model(inputs)
                 loss = criterion(outputs, targets.float())
                 """"""
