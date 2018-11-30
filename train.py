@@ -25,6 +25,7 @@ from sklearn.metrics import f1_score
 
 def getmodel(cls=61):
     model_conv = models.densenet.densenet201(pretrained=True)
+    model_conv.features.conv0 = nn.Conv2d(4, 64, kernel_size=7, stride=2, padding=3, bias=False)
     num_ftrs = model_conv.classifier.in_features
     model_conv.classifier = nn.Linear(num_ftrs, cls)
     return model_conv
@@ -234,5 +235,5 @@ if __name__ == '__main__':
         train(epoch)
         test(epoch)
         color = colors[np.random.randint(1, len(colors))]
-        print(f'{color}best: {best_acc}: {best_no}/{len(val_loader) * args.val_batch_size}{colors[0]}')
+        print(f'{color}best: {best_acc}{colors[0]}')
     start_epoch += args.epochs

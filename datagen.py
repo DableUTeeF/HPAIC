@@ -12,9 +12,9 @@ class Generator:
         self.target_len = target_len
 
     def get_single_image(self, idx):
-        x = np.zeros((*self.input_size, 3), dtype='float32')
-        c = ['red', 'green', 'blue']
-        for i in range(3):
+        x = np.zeros((*self.input_size, 4), dtype='float32')
+        c = ['red', 'green', 'blue', 'yellow']
+        for i in range(4):
             img = Image.open(os.path.join(self.rootpath, self.csv[idx][0]+f'_{c[i]}.png')).resize(self.input_size)
             x[:, :, i] = np.array(img, dtype='float32')
         x = np.rollaxis(x, 2)
