@@ -37,7 +37,7 @@ class DotDict(dict):
 
 if __name__ == '__main__':
 
-    colors = ['\033[0m', '\033[90m', '\033[91m', '\033[92m', '\033[93m', '\033[94m', '\033[95m', '\033[96m']
+    colors = ['\033[0m', '\033[91m', '\033[92m', '\033[93m', '\033[94m', '\033[95m', '\033[96m']
     args = DotDict({
         'batch_size': 32,
         'batch_mul': 1,
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     test_list = lists[26073:]
 
     train_dataset = datagen.Generator(train_list,
-                                      '/media/palm/data/Human Protein Atlas/train',
+                                      '/root/palm/DATA/HPAIC/train',
                                       28,
                                       (224, 224),
                                       )
@@ -93,7 +93,7 @@ if __name__ == '__main__':
                                               num_workers=args.workers,
                                               pin_memory=False)
     test_dataset = datagen.Generator(test_list,
-                                     '/media/palm/data/Human Protein Atlas/train',
+                                     '/root/palm/DATA/HPAIC/train',
                                      28,
                                      (224, 224),
                                      )
@@ -158,7 +158,7 @@ if __name__ == '__main__':
                 print(f'\r{" " * (len(lss))}', end='')
             except NameError:
                 pass
-            color = colors[np.random.randint(1, 8)]
+            color = colors[np.random.randint(1, len(colors))]
             lss = f'{batch_idx}/{len(trainloader)} | ' + \
                   f'ETA: {format_time(step_time * (len(trainloader) - batch_idx))} - ' + \
                   f'loss: {train_loss / (batch_idx + 1):.{3}} - ' + \
@@ -171,11 +171,11 @@ if __name__ == '__main__':
             logger.histo_summary(tag + '/grad', value.grad.data.cpu().numpy(), epoch)
         logger.scalar_summary('acc', correct / total, epoch)
         logger.scalar_summary('loss', train_loss / (batch_idx + 1), epoch)
-        color = colors[np.random.randint(1, 8)]
+        color = colors[np.random.randint(1, len(colors))]
         print(f'\r {color}'
               f'ToT: {format_time(time.time() - start_time)} - '
               f'loss: {train_loss / (batch_idx + 1):.{3}} - '
-              f'acc: {correct / total:.{5}}', end='')
+              f'acc: {correct / (batch_idx + 1):.{5}}', end='')
         optimizer.step()
         optimizer.zero_grad()
         # scheduler2.step()
