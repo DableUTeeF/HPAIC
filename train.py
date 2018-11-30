@@ -37,8 +37,9 @@ class DotDict(dict):
 
 
 def normalize(x):
-    x /= 127.5
-    x -= 1
+    x = x.astype('float32')
+    x -= np.array([13.46640062, 12.92092559, 20.01200438, 20.58882595], dtype='float32')
+    x /= np.array([34.85144181, 21.93041967, 32.65222709, 31.93022657], dtype='float32')
     return x
 
 
@@ -54,7 +55,7 @@ if __name__ == '__main__':
         'model': '',
         'train_plot': False,
         'epochs': 180,
-        'try_no': '2_dense201',
+        'try_no': '3_dense201',
         'imsize': 224,
         'imsize_l': 256,
         'traindir': '/root/palm/DATA/plant/train',
