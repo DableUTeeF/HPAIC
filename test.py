@@ -29,11 +29,12 @@ def pnasnet(cls=61):
 if __name__ == '__main__':
     model = densenet().cuda()
     # print(model)
-    checkpoint = torch.load('checkpoint/try_1_dense201best.t7')
+    checkpoint = torch.load('checkpoint/try_3_dense201temp.t7')
     model.load_state_dict(checkpoint['net'])
     # directory = '/root/palm/DATA/plant/ai_challenger_pdr2018_testA_20180905/AgriculturalDisease_testA/'
     # directory = '/home/palm/PycharmProjects/DATA/ai_challenger_pdr2018_testA_20180905/AgriculturalDisease_testA/'
     directory = '/media/palm/data/Human Protein Atlas/test'
+    directory = '/root/palm/DATA/HPAIC/train'
     out = []
     c = 0
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
